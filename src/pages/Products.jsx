@@ -1,25 +1,20 @@
 import { useState, useEffect } from 'react';
-// import useParams
 import { useParams } from 'react-router-dom';
-//import useFetch
 import useFetch from '../hooks/useFetch';
 import CategoryNav from '../components/CategoryNav';
 import Product from '../components/Product';
 
 const Products = () => {
 	const { id } = useParams();
-	// console.log(id);
 
-	//get data
-	const { data } = useFetch(
+	const { data: products } = useFetch(
 		`/products?populate=*&filters[categories][id][$eq]=${id}`
 	);
-	// console.log(data);
 
 	const [title, setTitle] = useState(null);
-	//set the titlew when the data is fetched
+
 	useEffect(() => {
-		if (data) {
+		if (products) {
 			setTitle(data[0].attributes.categories.data[0].attributes.title);
 		}
 	});
@@ -36,7 +31,7 @@ const Products = () => {
 						</div>
 						{/* productgrid */}
 						<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-[15px] xl:gap-[30px]">
-							{data?.map(product => {
+							{products?.map(product => {
 								return (
 									<Product
 										product={product}
